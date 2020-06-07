@@ -1,0 +1,3 @@
+[submodule "arduino-usb"]
+	path = arduino-usb
+	url = git@github.com:harlequin-tech/arduino-usb.git
