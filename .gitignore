@@ -12,6 +12,7 @@
 *.map
 *.exp
 
+
 # Precompiled Headers
 *.gch
 *.pch
@@ -50,3 +51,5 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+.DS_Store

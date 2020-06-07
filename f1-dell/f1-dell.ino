@@ -26,14 +26,12 @@ void loop()
 {
   //wait for Dell to get to ALERTING ERR
   delay(15000);
-  for (int i = 0; i < 3; i++) { //INSURANCE
-    buf[2] = F1;
-    Serial.write(buf, 8); // Send keypress
-    buf[0] = 0;
-    buf[2] = 0;
-    Serial.write(buf, 8); // Release key
-    delay(500);//INSURANCE
-  }
+
+  buf[2] = F1;
+  Serial.write(buf, 8); // Send keypress
+  buf[0] = 0;
+  buf[2] = 0;
+  Serial.write(buf, 8); // Release key
   
   Serial.end();
   
