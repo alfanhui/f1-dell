@@ -143,13 +143,13 @@ I bought a smaller Arduino clone for long term use, so I can reuse my official A
 8. **Test avrdude now with new patch config**
 
     ```bash
-    avrdude -c usbtiny -v -p m16u2
+    avrdude -c usbasp -v -p m16u2
     ```
 
 9. **Backup existing firmware on device**
 
     ```bash
-    avrdude -c usbtiny -p m16u2 -U flash:r:usb_chip.hex:i
+    avrdude -c usbasp -p m16u2 -U flash:r:usb_chip.hex:i
     ```
 
     > avrdude: AVR device initialized and ready to accept instructions
@@ -175,8 +175,8 @@ I bought a smaller Arduino clone for long term use, so I can reuse my official A
     avrdude -c usbasp -p m16u2 -U flash:w:firmware.hex
     ```
 
----
 All the credit goes to Nick Gammon from https://forum.arduino.cc/ for supplying this guide [Original post](https://forum.arduino.cc/index.php?topic=96706.0).
+
 ---
 
 ## key-codes
