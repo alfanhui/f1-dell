@@ -55,6 +55,130 @@ Run [burn-usb-firmware.sh](./burn-usb-firmware.sh) which uses dfu-programmer to 
 
 You may need to unplug and plug the arduino back in to get recognised.
 
+## Bootload via ISP Header (Non-DFU, Windows method)
+
+I bought a smaller Arduino clone for long term use, so I can reuse my official Arduino for other development. The board below did not have any pins labelled, and while I knew the 6 pins pointed out on the diagram were the ISP for ATmega16U2, I didn't know which way round it was. I could also not activate DFU-mode by shorting RST and GROUND. Here is the alterntive method for bootloading any .hex file to one of these things.
+
+![Diymore_DM_mini_uno_R3_Board_ATmega328_16U2_Arduino.jpg](./images/Diymore_DM_mini_uno_R3_Board_ATmega328_16U2_Arduino.jpg)
+
+### Non-DFU Dependencies
+
+* **avrdude**
+  1. Download & install winavr
+* **usbasp programmer** (alternatives will exist, this is just the one I used)
+  1. Download and extract USBasp-win-driver-x86-x64.zip
+  2. Run installDriver.exe from within
+* **git bash**
+
+1. **Solder a ISP male socket to the 6 pins pointed above**
+2. **Connect a programmer (USBASP) to the ISP socket, get the header the right way around using the diagram above**
+3. **Determine you have the same device signature for this guide**
+
+    ```bash
+    avrdude -c usbasp -v -p m328p
+    ```
+
+    > avrdude: Device signature = 0x1e9489
+    > avrdude: Expected signature for ATMEGA328P is 1E 95 0F
+
+    `-p` is set to anything valid to return the device signature from the board. If you do not see a signature, you haven't connected to the board correctly.
+
+4. **Determine if your avrdude.exe has configuration for -p m16u2**
+
+    ```bash
+    avrdude -c usbasp -v -p m16u2
+    ```
+
+    > avrdude: AVR Part "m16u2" not found.
+
+    If you get the same error above, thats ok, we will add the configuration for m16u2 in the next step.
+
+5. **Locate where avrdude.conf is stored**
+    On linux, avrdude.conf might be here:
+
+    `/usr/local/CrossPack-AVR-20100115/etc/avrdude.conf`
+
+    On Windows, I found my avrdude.conf here:
+
+    `C:\WinAVR-20100110\bin`
+
+    Alternatively run following command to find the path:
+
+    ```bash
+    which avrdude
+    ```
+
+6. **Copy the patch to that folder, and change directory to the folder**
+
+    ```bash
+    cp ./avrdude-5.8-confu2.patch C:/WinAVR-20100110/bin/avrdude-5.8-confu2.patch
+    cd C:/WinAVR-20100110/bin/
+    ```
+
+7. **Patch it**
+
+    ```bash
+    cp avrdude.conf avrdude.conf.orig  # make backup!!!
+    patch < avrdude-5.8-confu2.patch  # patch file
+    ```
+
+    The output should be similar to below:
+
+    > can't find file to patch at input line 4
+    > Perhaps you should have used the -p or --strip option?
+    > The text leading up to this was:
+    > > --------------------------
+    > > |diff -ru avrdude-5.8/avrdude.conf.in avrdude-5.8-wk/avrdude.conf.in
+    > > |--- avrdude-5.8/avrdude.conf.in	2010-12-06 13:47:47.000000000 +0900
+    > > |+++ avrdude-5.8-wk/avrdude.conf.in	2010-12-06 13:49:52.000000000 +0900
+    > > --------------------------
+    > File to patch:
+
+    Type: `avrdude.conf`
+
+    > File to patch: avrdude.conf
+    > patching file avrdude.conf
+    > Hunk #1 succeeded at 12785 (offset -383 lines).
+
+8. **Test avrdude now with new patch config**
+
+    ```bash
+    avrdude -c usbtiny -v -p m16u2
+    ```
+
+9. **Backup existing firmware on device**
+
+    ```bash
+    avrdude -c usbtiny -p m16u2 -U flash:r:usb_chip.hex:i
+    ```
+
+    > avrdude: AVR device initialized and ready to accept instructions
+    >
+    > Reading | ################################################## | 100% 0.01s
+    >
+    > avrdude: Device signature = 0x1e9489
+    > avrdude: reading flash memory:
+    >
+    > Reading | ################################################## | 100% 30.30s
+    >
+    > avrdude: writing output file "usb_chip.hex"
+    > 
+    > avrdude: safemode: Fuses OK
+    > 
+    > avrdude done.  Thank you.
+
+10. **Flash the .hex Firmware**
+
+    At this point, you can follow the **How to run** from above, and flash the .hex firmware as required using the following command:
+
+    ```bash
+    avrdude -c usbasp -p m16u2 -U flash:w:firmware.hex
+    ```
+
+---
+All the credit goes to Nick Gammon from https://forum.arduino.cc/ for supplying this guide [Original post](https://forum.arduino.cc/index.php?topic=96706.0).
+---
+
 ## key-codes
 
 You're welcome. [Source](http://www.fourwalledcubicle.com/files/LUFA/Doc/170418/html/_h_i_d_class_common_8h.html)
