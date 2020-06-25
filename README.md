@@ -35,7 +35,7 @@ To use dfu-programmer to change the firmware, put the Arduino in Device Firmware
 
 ![dfu mode](./images/dfu-mode-uno.png)
 
-The firmware used is the [arduino-keyboard](./arduino-usb/firmwares/arduino-keyboard) to convert an Arduino into a keyboard | HID device, and [arduino-usbserial](./arduino-usb/firmwares/arduino-usbserial) to convert the Arduino back to normal Arduino. Please view the Arduino firmware readme with building the correct firmware for your Arduino device by reading its [README.md](./arduino-usb/README.md). 
+The firmware used is the [arduino-keyboard](./arduino-usb/firmwares/arduino-keyboard) to convert an Arduino into a keyboard | HID device, and [arduino-usbserial](./arduino-usb/firmwares/arduino-usbserial) to convert the Arduino back to normal Arduino. Please view the Arduino firmware [README.md](./arduino-usb/README.md) with building the correct firmware for your Arduino device. 
 
 ## How to run
 
@@ -45,7 +45,7 @@ The firmware used is the [arduino-keyboard](./arduino-usb/firmwares/arduino-keyb
 
 3. Jump the pins of the Arduino to get into DFU mode
 
-4. Run [burn-keyboard-| hid-firmware.sh](./burn-keyboard-| hid-firmware.sh) to use dfu-programmer to write firmware of the Arduino to make it a keyboard | HID recognised device
+4. Run [burn-keyboard-hid-firmware.sh](./burn-keyboard-hid-firmware.sh) to use dfu-programmer to write firmware of the Arduino to make it a keyboard | HID recognised device
 
 Once the Arduino has been its firmware changed to Keyboard | HID, it will no longer be recognised by the Arduino IDE.
 
